@@ -1,0 +1,73 @@
+﻿@page "/PremierLeagueTable"
+
+<h1>Premier League Table</h1>
+
+<p>This is the Premier League Table</p>
+
+<table>
+    <tr>
+        <th>Position</th>
+        <th>Team Name</th>
+        <th>Played</th>
+        <th>Won</th>
+        <th>Drew</th>
+        <th>Lost</th>
+        <th>Goal difference</th>
+    </tr>
+    @if (true) { tableee = GetTable().Result; }
+    @foreach (var footballTeam in tableee)
+    {
+        Console.WriteLine(footballTeam);
+        var pos = footballTeam.position;
+        var name = footballTeam.team.name;
+        var played = footballTeam.playedGames;
+        var won = footballTeam.won;
+        var drew = footballTeam.draw;
+        var lost = footballTeam.lost;
+        var gd = footballTeam.goalDifference;
+        <tr>
+            <td>@pos</td>
+            <td>@name</td>
+            <td>@played</td>
+            <td>@won</td>
+            <td>@drew</td>
+            <td>@lost</td>
+            <td>@gd</td>
+        </tr>
+    }
+</table>
+
+<button class="btn btn-primary" @onclick="ShowTab">
+    Show Table
+</button>
+<button @onclick="(() => ShowComponent = true)">Show</button>
+<button @onclick="(() => ShowComponent = false)">Hide</button>
+
+@code {
+    bool ShowComponent { get; set; } = false;
+    private readonly string apiKey = "ccea16844b5a447fb3c7a00703a0e4ec";
+    private readonly string premTableUrl = "http://api.football-data.org/v2/competitions/2021/standings";
+    public int i = 0;
+    private bool show = false;
+    private ApiCalls.PremierLeagueJson.Standing tableee;
+
+    public async Task<ApiCalls.PremierLeagueJson.Standing> GetTable()
+    {
+        var tab = await ApiCalls.GetApiData.GetPremTableAsync();
+        return tab;
+        //table = tab.Result;
+        //var table = resp.Result.standings;
+        //Console.WriteLine("qqqqqqqqqqqqqqqqqqqqqqqqqq");
+        //Console.WriteLine(table);
+    }
+
+    private void ShowTab()
+    {
+        show = show ? false : true;
+    }
+
+    private void ShowTheTable()
+    {
+        
+    }
+}
